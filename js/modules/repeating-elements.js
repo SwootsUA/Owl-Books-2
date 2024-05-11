@@ -1,4 +1,5 @@
-import { clearCart, updateCart} from "./cart.js";
+import { clearCart, updateCart } from "./cart.js";
+import { userAuth } from './auth.js';
 
 function openSearch(isOpen) {
 	var searchIcon = document.querySelector('.search__img');
@@ -106,6 +107,11 @@ export async function buildPage(){
 		const cartBackground = document.querySelector('.background');
 		const cartCross = document.querySelector('.cart-header-cross');
 
+		const googleButton = document.querySelector('.gsi-material-button.google-signin-button');
+		if (googleButton) {
+			googleButton.addEventListener('click', () => { userAuth(); });
+		}
+
 		cartImg.addEventListener('click', () => { activateCart(); });
 		cartText.addEventListener('click', () => { activateCart(); });
 		cartCross.addEventListener('click', () => { activateCart(); });
@@ -120,6 +126,10 @@ export async function buildPage(){
 			<a href="./index.html" class="header__logo">
 				<img src="./img/logo.png" alt="logo" height="80">
 				<div>Owl Books</div>
+			</a>
+			<a href="./user.html" class="header__logo">
+				<img src="./img/logo.png" alt="logo" height="80">
+				<div>Увійти</div>
 			</a>
 			`
 	}

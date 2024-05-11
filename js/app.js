@@ -4,9 +4,14 @@ import { addToCart, updateCart } from "./modules/cart.js";
 import { fetchItemData as getItemFromDB } from "./modules/item.js";
 import { fetchSearchData as getAllItemsFromDB } from "./modules/index.js";
 import { fetchSearchData as getSearchItemsFromDB } from "./modules/search.js"
+import { isAuthorized } from "./modules/auth.js";
 
-// Будуємо структуру сторінки та додаємл обробники подій
+// Будуємо структуру сторінки та додаємо обробники подій
 await buildPage();
+
+if (document.querySelector('.user_page')) {
+	isAuthorized();
+}
 
 if (document.getElementById('index_row')){
 	// Отримуємо всі елементи з бази даних для головної сторінки
