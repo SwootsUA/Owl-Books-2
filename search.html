@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="ua">
+	<head>
+		<title>Owl Books</title>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="./css/style.css">
+		<link rel="icon" href="./img/book.png">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala" rel="st ylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet">
+		<meta name="robots", content="noindex, follow">
+	</head>
+
+	<body>
+		<div class="popup-low-quantity">
+            <div class="popup-low-quantity__body">
+                <div class="popup-low-quantity__text">
+                    На жаль, ми не маємо достатньо товару, щоб задовольнити ваше замовлення. Ви можете вибрати інший товар з нашого каталогу. Дякуємо за розуміння.
+                </div>
+                <button class="order-summary-button red">Закрити діалогове вікно</button>
+            </div>
+        </div>
+
+		<div class="cart-popup"></div>
+		<div class="cart-notification"></div>
+		<header class="header"></header>
+		
+		<div class="body">
+			<div class="items__container">
+				<h2 class="tittle">
+					Результат пошуку: 
+				</h2>
+				<div id="search_row" class="items__row"></div>
+			</div>
+		</div>
+
+		<footer class="footer"></footer>
+
+		<script type="module" src="./js/app.js"></script>
+	</body>
+</html>
