@@ -4,14 +4,16 @@ export async function isAuthorized() {
         mode: 'cors',
         credentials: 'include'
     });
-    
+
     if (response.ok) {
         // Convert the response body to JSON
         const responseData = await response.json();
         console.log(responseData);
+        return responseData;
     } else {
         // If response is not okay, handle the error
         console.error('Error:', response.statusText);
+        return null;
     }
 }
 

@@ -1,5 +1,5 @@
 import { clearCart, updateCart } from "./cart.js";
-import { userAuth } from './auth.js';
+import { userAuth, isAuthorized } from './auth.js';
 
 function openSearch(isOpen) {
 	var searchIcon = document.querySelector('.search__img');
@@ -38,7 +38,8 @@ export async function buildPage(){
 	const body = document.querySelector('.body');
 	const cartNotification = document.querySelector('.cart-notification');
 	const cartPopUp = document.querySelector('.cart-popup');
-	
+	const userPage = document.querySelector('.user_page');
+
 	if(cartNotification) {
 		cartNotification.innerHTML =
 			`
@@ -111,6 +112,31 @@ export async function buildPage(){
 		if (googleButton) {
 			googleButton.addEventListener('click', () => { userAuth(); });
 		}
+
+		if(userPage) {
+			isAuthorized().then(user => {
+			  if(user) {
+				if(user.picture)
+					var picture = document.querySelector('.user_page__image').src = user.picture;
+				if(user.name)
+					document.querySelector('.order-input.name').value = user.name;
+				if(user.surname)
+					document.querySelector('.order-input.surname').value = user.surname;
+				if(user.phone)
+					document.querySelector('.order-input.phone').value = user.phone;
+				if(user.email)
+					document.querySelector('.order-input.email').value = user.email;
+				if(user.region_id)
+					document.querySelector('.order-input.oblast').value = user.region_id;
+				if(user.city)
+					document.querySelector('.order-input.city').value = user.city;
+			  } else {
+				console.log('User not found');
+			  }
+			}).catch(error => {
+			  console.error(`Error in isAuthorized: ${error}`);
+			});
+		  }
 
 		cartImg.addEventListener('click', () => { activateCart(); });
 		cartText.addEventListener('click', () => { activateCart(); });
