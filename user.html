@@ -29,13 +29,13 @@
 		<div class="body">
 			<div class="user_page">
                 <div class="user_page__image_container">
-                    <img class="user_page__image" src="" alt="">
+                    <img class="user_page__image" referrerpolicy="no-referrer" src="./img/pic.jpg" alt="User image">
                 </div>
                 <div class="user_info">
                     <input type="text" class="order-input name" placeholder="Ім'я">
                     <input type="text" class="order-input surname" placeholder="Прізвище">
                     <input type="tel" class="order-input phone" placeholder="Номер телефону">
-                    <input type="email" class="order-input email" placeholder="Електронна пошта">
+                    <input type="email" class="order-input email" placeholder="Електронна пошта" disabled>
                     <select class="order-input oblast">
                         <option value="" disabled selected> --- Виберіть область --- </option>
                         <option value="1">Вінницька область</option>
@@ -65,11 +65,13 @@
                     </select>
                     <input type="text" class="order-input city" placeholder="Місто">
                 </div>
-                <div class="save_info_button">
-
-                </div>
-                <div class="delete_account_button">
-
+                <div class="user_page_account_controls">
+                    <div class="save_info_button_container">
+                        <button id="save_button" class="order-summary-button green">Зберегти зміни</button>
+                    </div>
+                    <div class="logout_button_container">
+                        <button id="logout_button" class="order-summary-button red">Вийти з аккаунта</button>
+                    </div>
                 </div>
             </div>
             <google-signin>

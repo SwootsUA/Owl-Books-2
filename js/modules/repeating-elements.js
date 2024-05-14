@@ -1,5 +1,5 @@
 import { clearCart, updateCart } from "./cart.js";
-import { userAuth, isAuthorized } from './auth.js';
+import { userAuth, isAuthorized, userLogOut, updateUserInfoOnServer } from './auth.js';
 
 function openSearch(isOpen) {
 	var searchIcon = document.querySelector('.search__img');
@@ -114,29 +114,87 @@ export async function buildPage(){
 		}
 
 		if(userPage) {
-			isAuthorized().then(user => {
+			var name, surname, phone, email, region_id, city;
+			var prev_name, prev_surname, prev_phone, prev_region_id, prev_city;
+			var google_id;
+
+			await isAuthorized().then(user => {
 			  if(user) {
+				google_id = user.google_id;
+				
+				phone = document.querySelector('.order-input.phone');
+				name = document.querySelector('.order-input.name');
+				surname = document.querySelector('.order-input.surname');
+				email = document.querySelector('.order-input.email');
+				region_id = document.querySelector('.order-input.oblast');
+				city = document.querySelector('.order-input.city');
+				
 				if(user.picture)
-					var picture = document.querySelector('.user_page__image').src = user.picture;
-				if(user.name)
-					document.querySelector('.order-input.name').value = user.name;
-				if(user.surname)
-					document.querySelector('.order-input.surname').value = user.surname;
-				if(user.phone)
-					document.querySelector('.order-input.phone').value = user.phone;
-				if(user.email)
-					document.querySelector('.order-input.email').value = user.email;
-				if(user.region_id)
-					document.querySelector('.order-input.oblast').value = user.region_id;
-				if(user.city)
-					document.querySelector('.order-input.city').value = user.city;
+					document.querySelector('.user_page__image').src = user.picture;
+				if(user.name) {
+					name.value = user.name;
+					prev_name = user.name;
+				}
+				if(user.surname) {
+					surname.value = user.surname;
+					prev_surname = user.surname;
+				}
+				if(user.phone) {
+					phone.value = user.phone;
+					prev_phone = user.phone;
+				}
+				if(user.email) {
+					email.value = user.email;
+				}
+				if(user.region_id) {
+					region_id.value = user.region_id;
+					prev_region_id = user.region_id;
+				}
+				if(user.city) {
+					city.value = user.city;
+					prev_city = user.city;
+				}
 			  } else {
 				console.log('User not found');
 			  }
 			}).catch(error => {
 			  console.error(`Error in isAuthorized: ${error}`);
 			});
-		  }
+
+			function saveUserInfo() {
+				if (parseInt(phone.value.length) > 15) {
+					phone.classList.add('error');
+					phone.addEventListener('focus', () => {
+						phone.classList.remove('error');
+					})
+					return;
+				}
+
+				function addFieldIfChanged(prevValue, currValue, fieldName, fieldsObject) {
+					if (prevValue !== currValue) {
+						fieldsObject[fieldName] = currValue;
+					}
+				}
+
+				var fields = {};
+
+				addFieldIfChanged(prev_name, name.value, 'name', fields);
+				addFieldIfChanged(prev_surname, surname.value, 'surname', fields);
+				addFieldIfChanged(prev_phone, phone.value, 'phone', fields);
+				addFieldIfChanged(prev_region_id, region_id.value, 'region_id', fields);
+				addFieldIfChanged(prev_city, city.value, 'city', fields);
+
+				updateUserInfoOnServer(google_id, fields)
+			}
+
+			async function logOut() {
+				await userLogOut();
+				document.location.href = document.location.href; 
+			}
+
+			document.getElementById("save_button").onclick = saveUserInfo;
+			document.getElementById("logout_button").onclick = logOut;
+		}
 
 		cartImg.addEventListener('click', () => { activateCart(); });
 		cartText.addEventListener('click', () => { activateCart(); });
@@ -154,8 +212,7 @@ export async function buildPage(){
 				<div>Owl Books</div>
 			</a>
 			<a href="./user.html" class="header__logo">
-				<img src="./img/logo.png" alt="logo" height="80">
-				<div>Увійти</div>
+				<img src="./img/logo.png" alt="user_pic" height="80">
 			</a>
 			`
 	}
