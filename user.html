@@ -32,12 +32,12 @@
                     <img class="user_page__image" referrerpolicy="no-referrer" src="./img/pic.jpg" alt="User image">
                 </div>
                 <div class="user_info">
-                    <input type="text" class="order-input name" placeholder="Ім'я">
-                    <input type="text" class="order-input surname" placeholder="Прізвище">
-                    <input type="tel" class="order-input phone" placeholder="Номер телефону">
-                    <input type="email" class="order-input email" placeholder="Електронна пошта" disabled>
+                    <input type="text" class="order-input name" maxlength="255" placeholder="Ім'я">
+                    <input type="text" class="order-input surname" maxlength="255" placeholder="Прізвище">
+                    <input type="tel" class="order-input phone" maxlength="15" placeholder="Номер телефону">
+                    <input type="email" class="order-input email" maxlength="255" placeholder="Електронна пошта" disabled>
                     <select class="order-input oblast">
-                        <option value="" disabled selected> --- Виберіть область --- </option>
+                        <option value="0" selected> --- Виберіть область --- </option>
                         <option value="1">Вінницька область</option>
                         <option value="2">Волинська область</option>
                         <option value="3">Дніпропетровська область</option>
@@ -63,7 +63,7 @@
                         <option value="23">Чернівецька область</option>
                         <option value="24">Чернігівська область</option>
                     </select>
-                    <input type="text" class="order-input city" placeholder="Місто">
+                    <input type="text" class="order-input city" maxlength="255" placeholder="Місто">
                 </div>
                 <div class="user_page_account_controls">
                     <div class="save_info_button_container">

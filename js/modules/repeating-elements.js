@@ -139,9 +139,9 @@ export async function buildPage(){
 					surname.value = user.surname;
 					prev_surname = user.surname;
 				}
-				if(user.phone) {
-					phone.value = user.phone;
-					prev_phone = user.phone;
+				if(user.phone_number) {
+					phone.value = user.phone_number;
+					prev_phone = user.phone_number;
 				}
 				if(user.email) {
 					email.value = user.email;
@@ -171,7 +171,7 @@ export async function buildPage(){
 				}
 
 				function addFieldIfChanged(prevValue, currValue, fieldName, fieldsObject) {
-					if (prevValue !== currValue) {
+					if (prevValue !== currValue && (currValue != null)) {
 						fieldsObject[fieldName] = currValue;
 					}
 				}
@@ -180,7 +180,7 @@ export async function buildPage(){
 
 				addFieldIfChanged(prev_name, name.value, 'name', fields);
 				addFieldIfChanged(prev_surname, surname.value, 'surname', fields);
-				addFieldIfChanged(prev_phone, phone.value, 'phone', fields);
+				addFieldIfChanged(prev_phone, phone.value, 'phone_number', fields);
 				addFieldIfChanged(prev_region_id, region_id.value, 'region_id', fields);
 				addFieldIfChanged(prev_city, city.value, 'city', fields);
 
@@ -212,7 +212,7 @@ export async function buildPage(){
 				<div>Owl Books</div>
 			</a>
 			<a href="./user.html" class="header__logo">
-				<img src="./img/logo.png" alt="user_pic" height="80">
+				<img src="./img/user.png" alt="user_pic" height="80">
 			</a>
 			`
 	}
