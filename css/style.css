@@ -1073,6 +1073,8 @@ ul, li {
 /* Google button */
 
 .gsi-material-button {
+    user-select: none;
+    appearance: none;
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
@@ -1204,6 +1206,13 @@ ul, li {
 
 .user_page_account_controls {
     display: flex;
+}
+
+.user_page_auth {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .user_page.hidden {
