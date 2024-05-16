@@ -1,3 +1,4 @@
+import { isAuthorized } from "./auth.js";
 import * as cartModule from "./cart.js";
 
 export function addInputsCheck() {
@@ -37,8 +38,17 @@ export function addInputsCheck() {
 
         if (dontContainsError && cartHasItem) {       
             let cart = localStorage.getItem("cart");
-          
+            
+            var google_id;
+
+            await isAuthorized().then(user => {
+                if(user) {
+                  google_id = user.google_id; 
+                }
+            });
+
             let requestString = `http://localhost:2210/add-order?` +
+            `google_id=${google_id}&` +
             `name=${document.querySelector('.name').value}&` +
             `surname=${document.querySelector('.surname').value}&` +
             `phone_number=${document.querySelector('.phone').value}&` +

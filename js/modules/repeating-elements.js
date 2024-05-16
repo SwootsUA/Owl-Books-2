@@ -2,20 +2,22 @@ import { clearCart, updateCart } from "./cart.js";
 import { userAuth, isAuthorized, userLogOut, updateUserInfoOnServer } from './auth.js';
 
 function openSearch(isOpen) {
+	var header = document.querySelector('.header');
+	var header_logo = document.querySelector('.header__logo');
+	var header_user_image = document.querySelector('.header_user_image');
 	var searchIcon = document.querySelector('.search__img');
 	var searchCross = document.querySelector('.search__cross');
 	var searchInput = document.querySelector('.search__input');
 	var cartImg = document.querySelector('.cart__img');
 	
-	if (isOpen) {
-		cartImg.classList.toggle('hidden');
-		searchIcon.classList.toggle('hidden');
-		searchCross.classList.toggle('hidden');
-		searchInput.classList.toggle('active');
-	} else {
-		searchIcon.classList.toggle('hidden');
-		searchCross.classList.toggle('hidden');
-		searchInput.classList.toggle('active');
+	header.classList.toggle('search_opened');
+	header_logo.classList.toggle('hidden');
+	header_user_image.classList.toggle('hidden');
+	searchIcon.classList.toggle('hidden');
+	searchCross.classList.toggle('hidden');
+	searchInput.classList.toggle('active');
+
+	if (!isOpen) {
 		setTimeout(() => {cartImg.classList.toggle('hidden')}, 350);
 	}
 }
@@ -47,6 +49,48 @@ export async function buildPage(){
 				Товар успішно додано у корзину!
 			</div>
 			`
+	}
+
+	const orderPage = document.querySelector('.make-order-delivery');
+	console.log(orderPage);
+
+	if(orderPage) {
+		console.log('order-page');
+		await isAuthorized().then(user => {
+			if(user) {
+			  google_id = user.google_id;
+				  
+			  phone = document.querySelector('.order-input.phone');
+			  name = document.querySelector('.order-input.name');
+			  surname = document.querySelector('.order-input.surname');
+			  email = document.querySelector('.order-input.email');
+			  region_id = document.querySelector('.order-input.oblast');
+			  city = document.querySelector('.order-input.city');
+
+			  if(user.name) {
+				  name.value = user.name;
+			  }
+			  if(user.surname) {
+				  surname.value = user.surname;
+			  }
+			  if(user.phone_number) {
+				  phone.value = user.phone_number;
+			  }
+			  if(user.email) {
+				  email.value = user.email;
+			  }
+			  if(user.region_id) {
+				  region_id.value = user.region_id;
+			  }
+			  if(user.city) {
+				  city.value = user.city;
+			  }
+			} else {
+			  console.log('not Authorized');
+			}
+		}).catch(error => {
+			console.error(`Error in isAuthorized: ${error}`);
+		});
 	}
 
 	if(body) {
@@ -89,11 +133,6 @@ export async function buildPage(){
 		body.innerHTML = 
 			`
 			<div class="controls">
-				<form class="search" action="./search.html" method="get">
-					<input class="search__input" type="search" name="s" placeholder="Пошук...">
-					<img class="search__img" src="./img/search.png" alt="search">
-					<img class="search__cross hidden" src="./img/cross.png" alt="close search">	
-				</form>
 				<div class="cart">
 					<img class="cart__img" src="./img/cart.png" alt="cart">
 					<div class="cart__text">Кошик</div>
@@ -101,8 +140,6 @@ export async function buildPage(){
 			</div>
 			` + body.innerHTML;
 
-		const searchIcon = document.querySelector('.search__img');
-		const searchCross = document.querySelector('.search__cross');
 		const cartImg = document.querySelector('.cart__img');
 		const cartText = document.querySelector('.cart__text');
 		const cartBackground = document.querySelector('.background');
@@ -119,7 +156,11 @@ export async function buildPage(){
 			var google_id;
 
 			await isAuthorized().then(user => {
+			  var user_page = document.querySelector('.user_page');
+			  var user_page_auth = document.querySelector('.user_page_auth');
+
 			  if(user) {
+				user_page.classList.remove('hidden');
 				google_id = user.google_id;
 				
 				phone = document.querySelector('.order-input.phone');
@@ -155,6 +196,7 @@ export async function buildPage(){
 					prev_city = user.city;
 				}
 			  } else {
+				user_page_auth.classList.remove('hidden');
 				console.log('User not found');
 			  }
 			}).catch(error => {
@@ -200,21 +242,30 @@ export async function buildPage(){
 		cartText.addEventListener('click', () => { activateCart(); });
 		cartCross.addEventListener('click', () => { activateCart(); });
 		cartBackground.addEventListener('click', () => { activateCart(); });
-		searchIcon.addEventListener('click', () => { openSearch(true); });
-		searchCross.addEventListener('click', () => { openSearch(false); });
 	}
 
 	if(header) {
 		header.innerHTML = 
 			`
-			<a href="./index.html" class="header__logo">
-				<img src="./img/logo.png" alt="logo" height="80">
-				<div>Owl Books</div>
-			</a>
-			<a href="./user.html" class="header__logo">
-				<img src="./img/user.png" alt="user_pic" height="80">
-			</a>
-			`
+				<form class="search" action="./search.html" method="get">
+					<input class="search__input" type="search" name="s" placeholder="Пошук...">
+					<img class="search__img" src="./img/search.png" alt="search">
+					<img class="search__cross hidden" src="./img/cross.png" alt="close search">	
+				</form>
+				<a href="./index.html" class="header__logo">
+					<img src="./img/logo.png" alt="logo" height="80">
+					<div>Owl Books</div>
+				</a>
+				<a href="./user.html" class="header_user_image">
+					<img src="./img/user.png" alt="user_pic" height="80">
+				</a>
+			`;
+
+		const searchIcon = document.querySelector('.search__img');
+		const searchCross = document.querySelector('.search__cross');
+
+		searchIcon.addEventListener('click', () => { openSearch(true); });
+		searchCross.addEventListener('click', () => { openSearch(false); });
 	}
 	
 	if(footer) {

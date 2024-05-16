@@ -118,9 +118,18 @@ input[type="search"], textarea {
 .header {
     background-color: #3E2B26;
     display: flex;
-    padding: 4pt 70pt 4pt 70pt;
+    padding: 4pt 15pt 4pt 15pt;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
+}
+
+.header > a, .header > form {
+    flex: 1 1 0px;
+    text-align: center;
+}
+
+.header img {
+    object-fit: contain;
 }
 
 .header a:hover, a:visited, a:link, a:active { 
@@ -157,6 +166,11 @@ input[type="search"], textarea {
     margin: 10px;
 }
 
+.header_user_image {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 .body {
     display: flex;
     flex-direction: column;
@@ -170,6 +184,7 @@ input[type="search"], textarea {
     margin: 10px 15px 10px 15px;
     height: fit-content;
     justify-content: space-between;
+    flex-direction: row-reverse;
 }
 
 .search {
@@ -654,6 +669,7 @@ ul, li {
 
 .items__row {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     align-items: start;
 }
@@ -722,6 +738,32 @@ ul, li {
     background-color: #ffffff; 
     color: #4CAF50;
     cursor: pointer;
+}
+
+@media (max-width: 620px) {
+    .item {
+        width: 125px;
+        padding: 15px;
+    }
+    
+    .item_image {
+        height: 165px;
+    }
+    
+    .item__content__name {
+        max-width: 100%;
+        font-size: 14px;
+    }
+    
+    .item__content__price {
+        font-size: 14px;
+    }
+
+    .item__content__row button.button__buy {
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 5px;
+    }
 }
 
 .footer {
@@ -846,13 +888,6 @@ ul, li {
         justify-content: space-between;
     }
 
-    .header__logo {
-        margin: 0;
-        flex-direction: row;
-        align-items: center;
-        font-size: 48pt;
-    }
-
     .burger-menu_button {
         display: flex;
     }
@@ -908,6 +943,13 @@ ul, li {
     }
 }
 
+@media (max-width: 500px) {
+    .header__logo {
+        margin: 3px;
+        font-size: 10pt;
+    }
+}
+
 @media (max-width: 464px) {
     .item_page__info_container {
         flex-direction: column;
@@ -919,25 +961,7 @@ ul, li {
     }
 }
 
-
-
-@media (max-width: 550px) {
-    .header__logo {
-        font-size: 22pt;
-    }
-
-    .header__logo img {
-        width: 100px;
-        height: auto;
-    }
-}
-
 @media (max-width: 400px) {
-    .header__logo img {
-        width: 70px;
-        height: auto;
-    }
-
     .burger-menu_button {
         width: 90px;
         height: auto;
@@ -950,21 +974,52 @@ ul, li {
     }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 1100px) {
     .search__input {
         opacity: 0;
         width: 0;
         margin: 0;
         padding: 0;
         border: 0;
-        transition: all 1s ease-out;
+        transition: all 0.5s ease-out;
     }
     
-    .search {
-        width: 100%;
+    .header.search_opened > a, .header.search_opened > form {
+        flex: initial;
+    }
+    
+    .header.search_opened {
+        justify-content: center;
     }
 
-    .cart__img {
+    .search {
+        width: auto;
+    }
+
+    .header__logo.hidden {
+        opacity: 0;
+        width: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        transition: all 0.5s ease-out;
+    }
+
+    .header_user_image.hidden {
+        opacity: 0;
+        width: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        transition: all 0.5s ease-out;
+    }
+
+    .header__logo {
+        opacity: 1;
+        transition: opacity 1s;
+    }
+
+    /* .cart__img {
         opacity: 1;
         padding-inline: 10px;
         width: auto;
@@ -975,7 +1030,7 @@ ul, li {
         opacity: 0;
         padding: 0;
         width: 0;
-    }
+    } */
 
     .search__input.active {
         opacity: 1;
@@ -1149,4 +1204,12 @@ ul, li {
 
 .user_page_account_controls {
     display: flex;
+}
+
+.user_page.hidden {
+    display: none;
+}
+
+.user_page_auth.hidden {
+    display: none;
 }
