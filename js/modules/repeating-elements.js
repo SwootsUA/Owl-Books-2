@@ -1,5 +1,6 @@
 import { clearCart, updateCart } from "./cart.js";
 import { userAuth, isAuthorized, userLogOut, updateUserInfoOnServer } from './auth.js';
+import { loadUserAudioBooks, loadUserEBooks } from "./user-items.js";
 
 function openSearch(isOpen) {
 	var header = document.querySelector('.header');
@@ -195,6 +196,9 @@ export async function buildPage(){
 					city.value = user.city;
 					prev_city = user.city;
 				}
+
+				loadUserEBooks(google_id);
+				loadUserAudioBooks(google_id);
 			  } else {
 				user_page_auth.classList.remove('hidden');
 				console.log('User not found');

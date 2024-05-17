@@ -166,6 +166,20 @@ input[type="search"], textarea {
     margin: 10px;
 }
 
+.owl-books-font {
+    color: #D7BD79;
+    font-family: 'Akaya Telivigala';
+    font-size: 24pt;
+    text-align: center;
+}
+
+.divider {
+    height: 2px; 
+    width: 100%;
+    background-color: #D7BD79;
+    margin: 20px 0;
+}
+
 .header_user_image {
     display: flex;
     flex-direction: row-reverse;
@@ -1181,7 +1195,7 @@ ul, li {
 /* End of Google button */
 
 .user_page {
-	width: 50%;
+	width: 95%;
     align-self: center;
     display: flex;
     align-items: center;
@@ -1189,7 +1203,7 @@ ul, li {
 }
 
 .user_info {
-    width: 100%;
+    width: 50%;
     max-width: 350px;
     display: flex;
     flex-direction: column;
@@ -1220,5 +1234,13 @@ ul, li {
 }
 
 .user_page_auth.hidden {
+    display: none;
+}
+
+.user_eBooks.hidden {
+    display: none;
+}
+
+.user_audioBooks.hidden {
     display: none;
 }
