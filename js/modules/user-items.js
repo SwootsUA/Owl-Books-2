@@ -94,15 +94,90 @@ function readEBook(book_id) {
     window.location.href = `http://localhost:2210/pdf?book_id=${book_id}`;
 }
 
-function downloadEBook(book_id) {
-    window.location.href = `http://localhost:2210/pdf?book_id=${book_id}`;
+function readAudioBook(book_id) {
+    window.location.href = `http://localhost:2210/mp3?book_id=${book_id}`;
+}
+
+async function downloadEBook(book_id) {
+    try {
+        const response = await fetch(`http://localhost:2210/pdf?book_id=${book_id}`, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const disposition = response.headers.get('Content-Disposition');
+        let fileName = `ebook_${book_id}.pdf`;
+        if (disposition && disposition.indexOf('attachment') !== -1) {
+            const matches = /filename="(.+)"/.exec(disposition);
+            if (matches != null && matches[1]) {
+                fileName = matches[1];
+            }
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Failed to download the ebook:', error);
+    }
+}
+
+async function downloadAudioBook(book_id) {
+    try {
+        const response = await fetch(`http://localhost:2210/mp3?book_id=${book_id}`, {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const disposition = response.headers.get('Content-Disposition');
+        let fileName = `audioBook_${book_id}.mp3`;
+        if (disposition && disposition.indexOf('attachment') !== -1) {
+            const matches = /filename="(.+)"/.exec(disposition);
+            if (matches != null && matches[1]) {
+                fileName = matches[1];
+            }
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error('Failed to download the audioBook:', error);
+    }
 }
 
 export async function loadUserEBooks() {
     await loadUserBooks('2', 'eBooks', 'Читати');
     addEventListenersToTheButtons('eBooks', readEBook, downloadEBook);
 }
+
 export async function loadUserAudioBooks() {
     await loadUserBooks('3', 'audioBooks', 'Слухати');
-    addEventListenersToTheButtons('audioBooks');
+    addEventListenersToTheButtons('audioBooks', readAudioBook, downloadAudioBook);
 }

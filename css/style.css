@@ -296,7 +296,7 @@ input[type="search"], textarea {
     padding-bottom: 10px;
 }
 
-.item_page__made_by {
+.item_page__more_info {
     color: lightgray;
     font-size: 30px;
     padding-bottom: 10px;
@@ -1244,3 +1244,4 @@ ul, li {
 .user_audioBooks.hidden {
     display: none;
 }
+

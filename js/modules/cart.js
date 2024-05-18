@@ -53,7 +53,23 @@ export async function updateCart() {
 		let response = await fetch(`http://localhost:2210/image?imgName=${products[i].image}`);
 		let blob = await response.blob();
 		image = URL.createObjectURL(blob);
-			
+		
+		var itemQuantity;
+
+		if(products[i].format_id == 1) {
+			itemQuantity = `
+			<img src="./img/minus.png" alt="minus" class="quantity-button minus">
+			<input type="number" min="1" max="100" class="product-quantity-input">
+			<img src="./img/plus.png" alt="plus" class="quantity-button plus">
+			`	
+		} else if (products[i].format_id == 2 || products[i].format_id == 3) {
+			itemQuantity = `
+			<img src="./img/minus.png" alt="minus" class="quantity-button minus" style="display: none;">
+			<input type="number" min="1" max="100" class="product-quantity-input" style="display: none;">
+			<img src="./img/plus.png" alt="plus" class="quantity-button plus" style="display: none;">
+			`
+		}
+
 		result += `
 		<li class="cart-product">
 			<div class="about-product">
@@ -69,9 +85,7 @@ export async function updateCart() {
 			<div class="product-actions">
 				<div class="product-action-remove">Видалити</div>
 				<div id="${products[i].book_id}" class="product-quantity-input-container product-id">
-					<img src="./img/minus.png" alt="minus" class="quantity-button minus">
-					<input type="number" min="1" max="100" class="product-quantity-input">
-					<img src="./img/plus.png" alt="plus" class="quantity-button plus">
+					${itemQuantity}
 				</div>
 			</div>
 		</li>

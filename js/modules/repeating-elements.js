@@ -57,17 +57,53 @@ export async function buildPage(){
 
 	if(orderPage) {
 		console.log('order-page');
+
+		var cart;
+
+		if (!localStorage.getItem("cart")) {
+			localStorage.setItem("cart", "[]");
+		}
+
+		const region_id = document.querySelector('.order-input.oblast');
+		const city = document.querySelector('.order-input.city');
+		const novaPoshta = document.querySelector('.order-input.nova-post');
+		const phone = document.querySelector('.order-input.phone');
+		const regionText = document.querySelector('.contacts-text-content.oblast');
+		const cityText = document.querySelector('.contacts-text-content.city');
+		const novaPoshtaText = document.querySelector('.contacts-text-content.nova-post');
+		const phoneText = document.querySelector('.contacts-text-content.phone');
+		var cartHasNoPhysicalBooks = true;
+
+		cart = JSON.parse(localStorage.getItem("cart"));
+		const response = await fetch(`http://localhost:2210/cart?ids=${cart.map(obj => obj.id).join(',')}`);
+		const products = await response.json();
+
+		for(var i=0; i<products.length; i++) {
+			if(products[i].format_id == 1) {
+				cartHasNoPhysicalBooks = false;
+				break;
+			}
+		}
+
+		if(cartHasNoPhysicalBooks) {
+			region_id.classList.add('display_none');
+			city.classList.add('display_none');
+			novaPoshta.classList.add('display_none');
+			phone.classList.add('display_none');
+			phoneText.classList.add('display_none');
+			regionText.classList.add('display_none');
+			cityText.classList.add('display_none');
+			novaPoshtaText.classList.add('display_none');
+		}
+
 		await isAuthorized().then(user => {
 			if(user) {
 			  google_id = user.google_id;
 				  
-			  phone = document.querySelector('.order-input.phone');
 			  name = document.querySelector('.order-input.name');
 			  surname = document.querySelector('.order-input.surname');
 			  email = document.querySelector('.order-input.email');
-			  region_id = document.querySelector('.order-input.oblast');
-			  city = document.querySelector('.order-input.city');
-
+			  
 			  if(user.name) {
 				  name.value = user.name;
 			  }
