@@ -276,6 +276,20 @@ export async function buildPage(){
 
 		const checkbox = document.getElementById('custom-arrive-date');
 		const dateSelectorContainer = document.getElementById('date-selector-container');
+		const dateInput = document.getElementById('arrive-date');
+
+		function setDateInputBounds() {
+			const now = new Date();
+			const minDate = new Date(now);
+			minDate.setDate(now.getDate() + 3);
+			const maxDate = new Date(now);
+			maxDate.setDate(now.getDate() + 31);
+
+			const formatDate = date => date.toISOString().split('T')[0];
+
+			dateInput.min = formatDate(minDate);
+			dateInput.max = formatDate(maxDate);
+		}
 
 		checkbox.addEventListener('change', () => {
 			if (checkbox.checked) {
@@ -284,6 +298,8 @@ export async function buildPage(){
 				dateSelectorContainer.classList.remove('visible');
 			}
 		});
+
+		setDateInputBounds();
 
 		var cart;
 
