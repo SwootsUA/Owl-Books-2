@@ -563,11 +563,21 @@ textarea.order-input {
     width: 100%;
 }
 
-.contacts-text-content {
+.contacts-text-content, .contacts-input.date-text, #date-selector-container {
+    display: flex;
     color: white;
     font-size: large;
     margin-bottom: 20px;
     height: 26px;
+}
+
+#custom-arrive-date {
+    max-width: 30px;
+}
+
+#arrive-date {
+    margin-left: 10px;
+    max-width: 120px;
 }
 
 @media (max-width: 868px) {
@@ -697,6 +707,18 @@ ul, li {
     flex-direction: column;
     padding-inline: 20px;
     color: white;
+}
+
+#date-selector-container {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    margin-top: 10px;
+}
+
+#date-selector-container.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 .tittle {

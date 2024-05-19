@@ -127,7 +127,7 @@ export async function buildPage(){
 				break;
 			}			
 		}
-		
+
 		const cartImg = document.querySelector('.cart__img');
 		const cartText = document.querySelector('.cart__text');
 		const cartBackground = document.querySelector('.background');
@@ -273,6 +273,17 @@ export async function buildPage(){
 		} catch (error) {
 			console.log('userPage: ' + error);
 		}
+
+		const checkbox = document.getElementById('custom-arrive-date');
+		const dateSelectorContainer = document.getElementById('date-selector-container');
+
+		checkbox.addEventListener('change', () => {
+			if (checkbox.checked) {
+				dateSelectorContainer.classList.add('visible');
+			} else {
+				dateSelectorContainer.classList.remove('visible');
+			}
+		});
 
 		var cart;
 
