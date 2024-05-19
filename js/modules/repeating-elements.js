@@ -55,81 +55,6 @@ export async function buildPage(){
 	const orderPage = document.querySelector('.make-order-delivery');
 	console.log(orderPage);
 
-	if(orderPage) {
-		console.log('order-page');
-
-		var cart;
-
-		if (!localStorage.getItem("cart")) {
-			localStorage.setItem("cart", "[]");
-		}
-
-		const region_id = document.querySelector('.order-input.oblast');
-		const city = document.querySelector('.order-input.city');
-		const novaPoshta = document.querySelector('.order-input.nova-post');
-		const phone = document.querySelector('.order-input.phone');
-		const regionText = document.querySelector('.contacts-text-content.oblast');
-		const cityText = document.querySelector('.contacts-text-content.city');
-		const novaPoshtaText = document.querySelector('.contacts-text-content.nova-post');
-		const phoneText = document.querySelector('.contacts-text-content.phone');
-		var cartHasNoPhysicalBooks = true;
-
-		cart = JSON.parse(localStorage.getItem("cart"));
-		const response = await fetch(`http://localhost:2210/cart?ids=${cart.map(obj => obj.id).join(',')}`);
-		const products = await response.json();
-
-		for(var i=0; i<products.length; i++) {
-			if(products[i].format_id == 1) {
-				cartHasNoPhysicalBooks = false;
-				break;
-			}
-		}
-
-		if(cartHasNoPhysicalBooks) {
-			region_id.classList.add('display_none');
-			city.classList.add('display_none');
-			novaPoshta.classList.add('display_none');
-			phone.classList.add('display_none');
-			phoneText.classList.add('display_none');
-			regionText.classList.add('display_none');
-			cityText.classList.add('display_none');
-			novaPoshtaText.classList.add('display_none');
-		}
-
-		await isAuthorized().then(user => {
-			if(user) {
-			  google_id = user.google_id;
-				  
-			  name = document.querySelector('.order-input.name');
-			  surname = document.querySelector('.order-input.surname');
-			  email = document.querySelector('.order-input.email');
-			  
-			  if(user.name) {
-				  name.value = user.name;
-			  }
-			  if(user.surname) {
-				  surname.value = user.surname;
-			  }
-			  if(user.phone_number) {
-				  phone.value = user.phone_number;
-			  }
-			  if(user.email) {
-				  email.value = user.email;
-			  }
-			  if(user.region_id) {
-				  region_id.value = user.region_id;
-			  }
-			  if(user.city) {
-				  city.value = user.city;
-			  }
-			} else {
-			  console.log('not Authorized');
-			}
-		}).catch(error => {
-			console.error(`Error in isAuthorized: ${error}`);
-		});
-	}
-
 	if(body) {
 		cartPopUp.innerHTML =
 			`
@@ -171,16 +96,58 @@ export async function buildPage(){
 			`
 			<div class="controls">
 				<div class="cart">
-					<img class="cart__img" src="./img/cart.png" alt="cart">
-					<div class="cart__text">Кошик</div>
+					<div class="cart_elements">
+						<img class="cart__img" src="./img/cart.png" alt="cart">
+						<div class="cart__text">Кошик</div>
+					</div>
+					<div class="sort_order_select">
+						<span class="sort_order_select">Сортувати: </span> 
+						<select class="sort_order_select select">
+							<option value="none">За замовчуванням</option>
+							<option value="alphab_asc">Назва (А - Я)</option>
+							<option value="alphab_des">Назва (Я - А)</option>
+							<option value="price_asc">Ціна (низька > висока)</option>
+							<option value="price_des">Ціна (висока > низька)</option>
+						</select>
+					</div>
 				</div>
+				<a class="book_type_a" href="http://localhost:5500/search.html?t=3">Аудіо книги</a>
+				<a class="book_type_a" href="http://localhost:5500/search.html?t=2">Електронні книги</a>
+				<a class="book_type_a" href="http://localhost:5500/search.html?t=1">Друковані книги</a>
 			</div>
 			` + body.innerHTML;
 
+		var params = new URLSearchParams(location.search);
+		var option = params.get('o');
+		var selectElement = document.querySelector('.sort_order_select.select');
+			
+		for (var i = 0; i < selectElement.options.length; i++) {
+			if (selectElement.options[i].value === option) {
+				selectElement.options[i].selected = true;
+				break;
+			}			
+		}
+		
 		const cartImg = document.querySelector('.cart__img');
 		const cartText = document.querySelector('.cart__text');
 		const cartBackground = document.querySelector('.background');
 		const cartCross = document.querySelector('.cart-header-cross');
+
+		const sort_order_select = document.querySelector('.sort_order_select.select');
+		sort_order_select.addEventListener('change', () => {
+			var location = window.location;
+			var itself = document.querySelector('.sort_order_select.select');
+			var params = new URLSearchParams(location.search);
+			params.set('o', itself.value);
+			var newUrl = location.pathname + '?' + params.toString();
+			if (location.search.length === 0) {
+				newUrl = location.pathname + '?' + params.toString().substring(1);
+			}
+			if (location.pathname !== "/search.html") {
+				newUrl = "/search.html" + (newUrl.length > 0 ? '?' + params.toString() : '');
+			}
+			window.location.href = newUrl;
+		});
 
 		const googleButton = document.querySelector('.gsi-material-button.google-signin-button');
 		if (googleButton) {
@@ -191,6 +158,12 @@ export async function buildPage(){
 			var name, surname, phone, email, region_id, city;
 			var prev_name, prev_surname, prev_phone, prev_region_id, prev_city;
 			var google_id;
+
+			try {
+				document.querySelector('.sort_order_select').classList.add('display_none');
+			} catch (error) {
+				console.log('userPage: ' + error);
+			}
 
 			await isAuthorized().then(user => {
 			  var user_page = document.querySelector('.user_page');
@@ -282,6 +255,95 @@ export async function buildPage(){
 		cartText.addEventListener('click', () => { activateCart(); });
 		cartCross.addEventListener('click', () => { activateCart(); });
 		cartBackground.addEventListener('click', () => { activateCart(); });
+	}
+
+	if(document.querySelector('.item_page')) {
+		try {
+			document.querySelector('.sort_order_select').classList.add('display_none');
+		} catch (error) {
+			console.log('userPage: ' + error);
+		}
+	}
+
+	if(orderPage) {
+		console.log('order-page');
+
+		try {
+			document.querySelector('.sort_order_select').classList.add('display_none');
+		} catch (error) {
+			console.log('userPage: ' + error);
+		}
+
+		var cart;
+
+		if (!localStorage.getItem("cart")) {
+			localStorage.setItem("cart", "[]");
+		}
+
+		const region_id = document.querySelector('.order-input.oblast');
+		const city = document.querySelector('.order-input.city');
+		const novaPoshta = document.querySelector('.order-input.nova-post');
+		const phone = document.querySelector('.order-input.phone');
+		const regionText = document.querySelector('.contacts-text-content.oblast');
+		const cityText = document.querySelector('.contacts-text-content.city');
+		const novaPoshtaText = document.querySelector('.contacts-text-content.nova-post');
+		const phoneText = document.querySelector('.contacts-text-content.phone');
+		var cartHasNoPhysicalBooks = true;
+
+		cart = JSON.parse(localStorage.getItem("cart"));
+		const response = await fetch(`http://localhost:2210/cart?ids=${cart.map(obj => obj.id).join(',')}`);
+		const products = await response.json();
+
+		for(var i=0; i<products.length; i++) {
+			if(products[i].format_id == 1) {
+				cartHasNoPhysicalBooks = false;
+				break;
+			}
+		}
+
+		if(cartHasNoPhysicalBooks) {
+			region_id.classList.add('display_none');
+			city.classList.add('display_none');
+			novaPoshta.classList.add('display_none');
+			phone.classList.add('display_none');
+			phoneText.classList.add('display_none');
+			regionText.classList.add('display_none');
+			cityText.classList.add('display_none');
+			novaPoshtaText.classList.add('display_none');
+		}
+
+		await isAuthorized().then(user => {
+			if(user) {
+			  google_id = user.google_id;
+				  
+			  name = document.querySelector('.order-input.name');
+			  surname = document.querySelector('.order-input.surname');
+			  email = document.querySelector('.order-input.email');
+			  
+			  if(user.name) {
+				  name.value = user.name;
+			  }
+			  if(user.surname) {
+				  surname.value = user.surname;
+			  }
+			  if(user.phone_number) {
+				  phone.value = user.phone_number;
+			  }
+			  if(user.email) {
+				  email.value = user.email;
+			  }
+			  if(user.region_id) {
+				  region_id.value = user.region_id;
+			  }
+			  if(user.city) {
+				  city.value = user.city;
+			  }
+			} else {
+			  console.log('not Authorized');
+			}
+		}).catch(error => {
+			console.error(`Error in isAuthorized: ${error}`);
+		});
 	}
 
 	if(header) {

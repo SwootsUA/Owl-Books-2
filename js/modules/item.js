@@ -6,19 +6,21 @@ export async function fetchItemData() {
         let response = await fetch(`http://localhost:2210/item?id=${itemId}`);
         let data = await response.json();
 
-        const itemContainer = await document.querySelector('.item_page');
+        const itemContainer = document.querySelector('.item_page');
         document.title = data.info.name;
 
         var image;
 
+        console.log(data);
+
         let genres = data.genres.length === 1 ? 'Жанр: ' : 'Жанри: ';
         data.genres.forEach((genre, index) => {
-            genres += `${genre.name}${index < data.genres.length - 1 ? ', ' : ''}`;
+            genres += `<a href="http://localhost:5500/search.html?g=${genre.genre_id}">${genre.name}</a>${index < data.genres.length - 1 ? ', ' : ''}`;
         });
 
         let authors = data.authors.length == 1 ? 'Автор: ' : 'Автори: ';
         data.authors.forEach((author, index) => {
-            authors += `${author.name}${index < data.authors.length - 1 ? ', ' : ''}`;
+            authors += `<a href="http://localhost:5500/search.html?a=${author.author_id}">${author.name}</a>${index < data.authors.length - 1 ? ', ' : ''}`;
         });
 
         const itemQuantity = data.info.quantity > 0 
@@ -74,7 +76,7 @@ export async function fetchItemData() {
                         Кількість сторінок: ${data.info.page_amount}
                     </div>
                     <div class="item_page__more_info">
-                        Видавництво: ${data.info.pub_name}
+                        Видавництво: <a href="http://localhost:5500/search.html?p=${data.info.pub_id}">${data.info.pub_name}</a>
                     </div>
                     <div class="item_page__more_info">
                         ISBN: ${data.info.ISBN}

@@ -201,6 +201,20 @@ input[type="search"], textarea {
     flex-direction: row-reverse;
 }
 
+.sort_order_select {
+    width: auto;
+    height: 25px;
+    margin-top: 5px;
+    color: white;
+    font-weight: bold;
+    z-index: 2;
+}
+
+span.sort_order_select {
+    font-size: x-large;
+    cursor: default;
+}
+
 .search {
     width: auto;
     display: flex;
@@ -239,10 +253,19 @@ input[type="search"], textarea {
 .cart {
     display: flex;
     align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    margin-bottom: -30px;
+}
+
+.cart_elements {
+    display: flex;
+    align-items: center;
     cursor: pointer;
 }
 
 .cart-popup {
+    z-index: 10;
     display: flex;
     flex-direction: row;
     justify-content: end;
@@ -288,7 +311,7 @@ input[type="search"], textarea {
 }
 
 .item_page__info {
-    padding-inline: 30px;
+    padding-inline: 20px;
 }
 
 .item_page__name {
@@ -679,6 +702,7 @@ ul, li {
 .tittle {
     margin: 0px;
     font-size: xx-large;
+    height: 32px;
 }
 
 .items__row {
@@ -951,7 +975,7 @@ ul, li {
     }
 }
 
-@media (max-width: 666px) {
+@media (max-width: 700px) {
     .item.item_page {
         flex-direction: column;
     }
@@ -1082,6 +1106,14 @@ ul, li {
 
 .display_none {
     display: none;
+}
+
+.book_type_a {
+    margin-inline: 5px;
+    align-self: center;
+    font-weight: bold;
+    font-size: large;
+    color: #D7BD79;
 }
 
 /* Google button */

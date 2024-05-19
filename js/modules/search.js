@@ -1,22 +1,69 @@
+import { buildRequestString } from "./input-check.js";
+
 export async function fetchSearchData() {
     return new Promise(async (resolve) => {
         const searchParams = new URLSearchParams(window.location.search);
         const name = searchParams.get('s');
+        const book_type = searchParams.get('t');
+        const genre = searchParams.get('g');
+        const author = searchParams.get('a');
+        const publisher = searchParams.get('p');
+        const orderby = searchParams.get('o');
 
-        let response = await fetch(`http://localhost:2210/search?name=${name}`)
+        console.log(name, book_type, genre, author, publisher, orderby);
+        const tittle = document.querySelector('.tittle');
+
+        var params = {
+            book_type: book_type,
+            genre: genre,
+            author: author,
+            publisher: publisher,
+        }
+
+        const paramsQuery = buildRequestString('http://localhost:2210/params', params)
+        let paramsResponse = await fetch(paramsQuery);
+        let paramsNames = await paramsResponse.json();
+        console.log(paramsNames);
+
+        if(name != null) { 
+            tittle.innerHTML += "Назва: " + name;
+        }
+
+        if(paramsNames.author_name != null) { 
+            tittle.innerHTML += "Автор: " + paramsNames.author_name;
+        }
+
+        if(paramsNames.book_format != null) { 
+            tittle.innerHTML += "Формат: " + paramsNames.book_format;
+        }
+
+        if(paramsNames.publisher_name != null) { 
+            tittle.innerHTML += "Видавництво: " + paramsNames.publisher_name;
+        }
+
+        if(paramsNames.genre_name != null) { 
+            tittle.innerHTML += "Жанр: " + paramsNames.genre_name;
+        }
+
+        params.name = name;
+        params.orderby = orderby;
+
+        const query = buildRequestString('http://localhost:2210/search', params);
+        console.log(query);
+
+        let response = await fetch(query);
+        
         let data = await response.json();
         
         var length = data.length;
 
-        const tittle = await document.querySelector('.tittle');
-        tittle.innerHTML += name;
-        const search_row = await document.querySelector('.items__row');
+        const search_row = document.querySelector('.items__row');
 
         for (const item of data) {
             response = await fetch(`http://localhost:2210/image?imgName=${item.image}`);
             
             let blob = await response.blob();
-            let image = await URL.createObjectURL(blob);
+            let image = URL.createObjectURL(blob);
             
             search_row.innerHTML +=
             `

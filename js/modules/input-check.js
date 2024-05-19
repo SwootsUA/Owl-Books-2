@@ -148,14 +148,13 @@ export function addInputsCheck() {
             popUp.classList.remove('active');
         };
         cartModule.clearCart();
-    }
+    }   
+}
 
-    function buildRequestString(baseUrl, params) {
-        const queryString = Object.entries(params)
-          .filter(([key, value]) => value !== undefined && value !== "")
-          .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-          .join('&');
-      
-        return `${baseUrl}?${queryString}`;
-      }
+export function buildRequestString(baseUrl, params) {
+  const queryString = Object.entries(params)
+    .filter(([key, value]) => value !== undefined && value !== "" && value !== null)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&'); 
+  return `${baseUrl}?${queryString}`;
 }
