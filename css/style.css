@@ -500,6 +500,11 @@ span.sort_order_select {
     outline: none;
 }
 
+.order-input.date {
+    width: 200px;
+    margin-bottom: 0px;
+}
+
 textarea.order-input {
     margin-right: 0 !important;
     width: 95% !important;
@@ -626,7 +631,7 @@ textarea.order-input {
 
 #arrive-date {
     margin-left: 10px;
-    max-width: 120px;
+    max-width: 170px;
 }
 
 @media (max-width: 868px) {
@@ -1176,7 +1181,7 @@ ul, li {
 }
 
 .display_none {
-    display: none;
+    display: none !important;
 }
 
 .book_type_a {

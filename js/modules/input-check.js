@@ -24,8 +24,11 @@ export function addInputsCheck() {
 		const city = document.querySelector('.order-input.city');
 		const novaPoshta = document.querySelector('.order-input.nova-post');
         const phone = document.querySelector('.order-input.phone');
+        const checkbox = document.getElementById('custom-arrive-date');
+        const datePick = document.getElementById('arrive-date');
 
         if(cartHasNoPhysicalBooks) {
+            datePick.classList.add("not_req");
             region_id.removeAttribute("required");
             city.removeAttribute("required");
             novaPoshta.removeAttribute("required");
@@ -35,6 +38,7 @@ export function addInputsCheck() {
             novaPoshta.classList.add("not_req");
             phone.classList.add("not_req");
         } else {
+            datePick.classList.remove("not_req");
             region_id.setAttribute("required", "true");
             city.setAttribute("required", "true");
             novaPoshta.setAttribute("required", "true");
@@ -72,6 +76,13 @@ export function addInputsCheck() {
             }
         } 
 
+        removeError(datePick);
+
+        if (checkbox.checked && datePick.value.length < 10 && !cartHasNoPhysicalBooks) {
+            addError(datePick);
+            dontContainsError = false;
+        }
+
         console.log(dontContainsError);
 
         let cartHasItem = false;
@@ -99,6 +110,7 @@ export function addInputsCheck() {
                 city: document.querySelector('.city').value,
                 NovaPoshta: document.getElementById('nova-post').value,
                 description: document.querySelector('.description').value,
+                pickUpDate: document.getElementById('arrive-date').value,
                 content: cart
             };
             

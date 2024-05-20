@@ -274,6 +274,7 @@ export async function buildPage(){
 			console.log('userPage: ' + error);
 		}
 
+		const checkboxLable = document.querySelector('.contacts-input.date-text');
 		const checkbox = document.getElementById('custom-arrive-date');
 		const dateSelectorContainer = document.getElementById('date-selector-container');
 		const dateInput = document.getElementById('arrive-date');
@@ -329,6 +330,8 @@ export async function buildPage(){
 		}
 
 		if(cartHasNoPhysicalBooks) {
+			checkboxLable.classList.add('display_none');
+			dateSelectorContainer.classList.add('display_none');
 			region_id.classList.add('display_none');
 			city.classList.add('display_none');
 			novaPoshta.classList.add('display_none');
