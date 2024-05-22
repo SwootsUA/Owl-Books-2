@@ -21,9 +21,13 @@ export function userAuth() {
     window.location.href = "http://localhost:2210/auth/google";
 }
 
-export async function updateUserInfoOnServer(google_id, fields) {
-    var query = `http://localhost:2210/save-user?google_id=${google_id}&fields=${JSON.stringify(fields)}`;
-    await fetch(query);
+export async function updateUserInfoOnServer(fields) {
+    var query = `http://localhost:2210/save-user?fields=${JSON.stringify(fields)}`;
+    await fetch(query, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'include'
+    });
 }
 
 export async function userLogOut() {

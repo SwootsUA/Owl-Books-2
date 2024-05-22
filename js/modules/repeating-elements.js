@@ -239,7 +239,7 @@ export async function buildPage(){
 				addFieldIfChanged(prev_region_id, region_id.value, 'region_id', fields);
 				addFieldIfChanged(prev_city, city.value, 'city', fields);
 
-				updateUserInfoOnServer(google_id, fields)
+				updateUserInfoOnServer(fields)
 			}
 
 			async function logOut() {
