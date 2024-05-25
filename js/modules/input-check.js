@@ -26,9 +26,13 @@ export function addInputsCheck() {
         const phone = document.querySelector('.order-input.phone');
         const checkbox = document.getElementById('custom-arrive-date');
         const datePick = document.getElementById('arrive-date');
+        const name = document.querySelector('.name');
+        const surname = document.querySelector('.surname');
+        const description = document.querySelector('.description');
+        const email = document.querySelector('.email');
 
+        datePick.classList.add("not_req");
         if(cartHasNoPhysicalBooks) {
-            datePick.classList.add("not_req");
             region_id.removeAttribute("required");
             city.removeAttribute("required");
             novaPoshta.removeAttribute("required");
@@ -38,7 +42,9 @@ export function addInputsCheck() {
             novaPoshta.classList.add("not_req");
             phone.classList.add("not_req");
         } else {
-            datePick.classList.remove("not_req");
+            if(checkbox.checked) {
+                datePick.classList.remove("not_req");
+            }
             region_id.setAttribute("required", "true");
             city.setAttribute("required", "true");
             novaPoshta.setAttribute("required", "true");
@@ -102,18 +108,20 @@ export function addInputsCheck() {
 
             const params = {
                 google_id: google_id,
-                name: document.querySelector('.name').value,
-                surname: document.querySelector('.surname').value,
-                phone_number: document.querySelector('.phone').value,
-                email: document.querySelector('.email').value,
-                region_id: document.querySelector('.oblast').value,
-                city: document.querySelector('.city').value,
-                NovaPoshta: document.getElementById('nova-post').value,
-                description: document.querySelector('.description').value,
-                pickUpDate: document.getElementById('arrive-date').value,
+                name: name.value,
+                surname: surname.value,
+                phone_number: phone.value,
+                email: email.value,
+                region_id: region_id.value,
+                city: city.value,
+                NovaPoshta: novaPoshta.value,
+                description: description.value,
+                pickUpDate: datePick.value,
                 content: cart
             };
             
+            console.log(params);
+
             const requestString = buildRequestString('http://localhost:2210/add-order', params);
 
             await fetch(requestString)
