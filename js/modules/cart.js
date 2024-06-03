@@ -38,6 +38,9 @@ export async function updateCart() {
 	const response = await fetch(`http://localhost:2210/cart?ids=${cart.map(obj => obj.id).join(',')}`);
 	const products = await response.json();
 
+	console.log(`${cart.map(obj => obj.id).join(',')}`);
+	console.log(products);
+
 	if (document.getElementById("ul-body")) {
 		document.getElementById("ul-body").remove();
 	}

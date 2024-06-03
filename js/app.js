@@ -2,7 +2,7 @@ import { buildPage } from "./modules/repeating-elements.js";
 import { addInputsCheck } from "./modules/input-check.js";
 import { addToCart, updateCart } from "./modules/cart.js";
 import { fetchItemData as getItemFromDB } from "./modules/item.js";
-import { fetchSearchData as getAllItemsFromDB } from "./modules/index.js";
+import { getAllData } from "./modules/index.js";
 import { fetchSearchData as getSearchItemsFromDB } from "./modules/search.js"
 
 // Будуємо структуру сторінки та додаємо обробники подій
@@ -10,7 +10,7 @@ await buildPage();
 
 if (document.getElementById('index_row')){
 	// Отримуємо всі елементи з бази даних для головної сторінки
-	await getAllItemsFromDB();
+	await getAllData();
 }
 
 if (document.getElementById('search_row')){

@@ -1,19 +1,18 @@
-export async function fetchSearchData() {
+export async function getAllData() {
     return new Promise(async (resolve) => {
-        const name = '';
-        
-        let response = await fetch(`http://localhost:2210/search?name=${name}`)
+    
+        let response = await fetch(`http://localhost:2210/search?name=`)
         let data = await response.json();
         
         var length = data.length;
 
-        const search_row = await document.querySelector('.items__row');
+        const search_row = document.querySelector('.items__row');
 
         for (const item of data) {
             response = await fetch(`http://localhost:2210/image?imgName=${item.image}`);
             
             let blob = await response.blob();
-            let image = await URL.createObjectURL(blob);
+            let image = URL.createObjectURL(blob);
             
             search_row.innerHTML +=
             `

@@ -69,7 +69,7 @@ export async function buildPage(){
 					</div>
 					<div class="cart-header">
 						<div class="cart-popup-quantity"></div>
-						<div class="cart-popup-clear"> Видалити все </div>
+						<div class="cart-popup-clear">Очистити кошик</div>
 					</div>
 					<div class="cart-summary">
 						<div class="cart-summary-wrapper">
@@ -89,50 +89,49 @@ export async function buildPage(){
 			`;
 
 		document.querySelector('.cart-popup-clear').addEventListener('click', clearCart);
-		
 		await updateCart();
-
+		
 		body.innerHTML = 
-			`
-			<div class="controls">
-				<div class="cart">
-					<div class="cart_elements">
-						<img class="cart__img" src="./img/cart.png" alt="cart">
-						<div class="cart__text">Кошик</div>
-					</div>
-					<div class="sort_order_select">
-						<span class="sort_order_select">Сортувати: </span> 
-						<select class="sort_order_select select">
-							<option value="none">За замовчуванням</option>
-							<option value="alphab_asc">Назва (А - Я)</option>
-							<option value="alphab_des">Назва (Я - А)</option>
-							<option value="price_asc">Ціна (низька > висока)</option>
-							<option value="price_des">Ціна (висока > низька)</option>
-						</select>
-					</div>
-				</div>
-				<a class="book_type_a" href="http://localhost:5500/search.html?t=3">Аудіо книги</a>
-				<a class="book_type_a" href="http://localhost:5500/search.html?t=2">Електронні книги</a>
-				<a class="book_type_a" href="http://localhost:5500/search.html?t=1">Друковані книги</a>
-			</div>
-			` + body.innerHTML;
-
+		`
+		<div class="controls">
+		<div class="cart">
+		<div class="cart_elements">
+		<img class="cart__img" src="./img/cart.png" alt="cart">
+		<div class="cart__text">Кошик</div>
+		</div>
+		<div class="sort_order_select">
+		<span class="sort_order_select">Сортувати: </span> 
+		<select class="sort_order_select select">
+		<option value="none">За замовчуванням</option>
+		<option value="alphab_asc">Назва (А - Я)</option>
+		<option value="alphab_des">Назва (Я - А)</option>
+		<option value="price_asc">Ціна (низька > висока)</option>
+		<option value="price_des">Ціна (висока > низька)</option>
+		</select>
+		</div>
+		</div>
+		<a class="book_type_a" href="http://localhost:5500/search.html?t=3">Аудіо книги</a>
+		<a class="book_type_a" href="http://localhost:5500/search.html?t=2">Електронні книги</a>
+		<a class="book_type_a" href="http://localhost:5500/search.html?t=1">Друковані книги</a>
+		</div>
+		` + body.innerHTML;
+		
 		var params = new URLSearchParams(location.search);
 		var option = params.get('o');
 		var selectElement = document.querySelector('.sort_order_select.select');
-			
+		
 		for (var i = 0; i < selectElement.options.length; i++) {
 			if (selectElement.options[i].value === option) {
 				selectElement.options[i].selected = true;
 				break;
 			}			
 		}
-
+		
 		const cartImg = document.querySelector('.cart__img');
 		const cartText = document.querySelector('.cart__text');
 		const cartBackground = document.querySelector('.background');
 		const cartCross = document.querySelector('.cart-header-cross');
-
+		
 		const sort_order_select = document.querySelector('.sort_order_select.select');
 		sort_order_select.addEventListener('change', () => {
 			var location = window.location;
@@ -148,39 +147,39 @@ export async function buildPage(){
 			}
 			window.location.href = newUrl;
 		});
-
+		
 		const googleButton = document.querySelector('.gsi-material-button.google-signin-button');
 		if (googleButton) {
 			googleButton.addEventListener('click', () => { userAuth(); });
 		}
-
+		
 		if(userPage) {
 			var name, surname, phone, email, region_id, city;
 			var prev_name, prev_surname, prev_phone, prev_region_id, prev_city;
 			var google_id;
-
+			
 			try {
 				document.querySelector('.sort_order_select').classList.add('display_none');
 			} catch (error) {
 				console.log('userPage: ' + error);
 			}
-
+			
 			await isAuthorized().then(user => {
-			  var user_page = document.querySelector('.user_page');
-			  var user_page_auth = document.querySelector('.user_page_auth');
-
-			  if(user) {
-				user_page.classList.remove('hidden');
-				google_id = user.google_id;
+				var user_page = document.querySelector('.user_page');
+				var user_page_auth = document.querySelector('.user_page_auth');
 				
-				phone = document.querySelector('.order-input.phone');
-				name = document.querySelector('.order-input.name');
-				surname = document.querySelector('.order-input.surname');
-				email = document.querySelector('.order-input.email');
-				region_id = document.querySelector('.order-input.oblast');
-				city = document.querySelector('.order-input.city');
-				
-				if(user.picture)
+				if(user) {
+					user_page.classList.remove('hidden');
+					google_id = user.google_id;
+					
+					phone = document.querySelector('.order-input.phone');
+					name = document.querySelector('.order-input.name');
+					surname = document.querySelector('.order-input.surname');
+					email = document.querySelector('.order-input.email');
+					region_id = document.querySelector('.order-input.oblast');
+					city = document.querySelector('.order-input.city');
+					
+					if(user.picture)
 					document.querySelector('.user_page__image').src = user.picture;
 				if(user.name) {
 					name.value = user.name;
@@ -205,55 +204,55 @@ export async function buildPage(){
 					city.value = user.city;
 					prev_city = user.city;
 				}
-
+				
 				loadUserEBooks(google_id);
 				loadUserAudioBooks(google_id);
-			  } else {
+			} else {
 				user_page_auth.classList.remove('hidden');
 				console.log('User not found');
-			  }
-			}).catch(error => {
-			  console.error(`Error in isAuthorized: ${error}`);
-			});
-
-			function saveUserInfo() {
-				if (parseInt(phone.value.length) > 15) {
-					phone.classList.add('error');
-					phone.addEventListener('focus', () => {
-						phone.classList.remove('error');
-					})
-					return;
-				}
-
-				function addFieldIfChanged(prevValue, currValue, fieldName, fieldsObject) {
-					if (prevValue !== currValue && (currValue != null)) {
-						fieldsObject[fieldName] = currValue;
-					}
-				}
-
-				var fields = {};
-
-				addFieldIfChanged(prev_name, name.value, 'name', fields);
-				addFieldIfChanged(prev_surname, surname.value, 'surname', fields);
-				addFieldIfChanged(prev_phone, phone.value, 'phone_number', fields);
-				addFieldIfChanged(prev_region_id, region_id.value, 'region_id', fields);
-				addFieldIfChanged(prev_city, city.value, 'city', fields);
-
-				updateUserInfoOnServer(fields)
 			}
-
-			async function logOut() {
-				await userLogOut();
-				document.location.href = document.location.href; 
+		}).catch(error => {
+			console.error(`Error in isAuthorized: ${error}`);
+		});
+		
+		function saveUserInfo() {
+			if (parseInt(phone.value.length) > 15) {
+				phone.classList.add('error');
+				phone.addEventListener('focus', () => {
+					phone.classList.remove('error');
+				})
+				return;
 			}
-
-			document.getElementById("save_button").onclick = saveUserInfo;
-			document.getElementById("logout_button").onclick = logOut;
+			
+			function addFieldIfChanged(prevValue, currValue, fieldName, fieldsObject) {
+				if (prevValue !== currValue && (currValue != null)) {
+					fieldsObject[fieldName] = currValue;
+				}
+			}
+			
+			var fields = {};
+			
+			addFieldIfChanged(prev_name, name.value, 'name', fields);
+			addFieldIfChanged(prev_surname, surname.value, 'surname', fields);
+			addFieldIfChanged(prev_phone, phone.value, 'phone_number', fields);
+			addFieldIfChanged(prev_region_id, region_id.value, 'region_id', fields);
+			addFieldIfChanged(prev_city, city.value, 'city', fields);
+			
+			updateUserInfoOnServer(fields)
 		}
-
-		cartImg.addEventListener('click', () => { activateCart(); });
-		cartText.addEventListener('click', () => { activateCart(); });
-		cartCross.addEventListener('click', () => { activateCart(); });
+		
+		async function logOut() {
+			await userLogOut();
+			document.location.href = document.location.href; 
+		}
+		
+		document.getElementById("save_button").onclick = saveUserInfo;
+		document.getElementById("logout_button").onclick = logOut;
+	}
+	
+	cartImg.addEventListener('click', () => { activateCart(); });
+	cartText.addEventListener('click', () => { activateCart(); });
+	cartCross.addEventListener('click', () => { activateCart(); });
 		cartBackground.addEventListener('click', () => { activateCart(); });
 	}
 

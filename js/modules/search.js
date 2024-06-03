@@ -26,23 +26,23 @@ export async function fetchSearchData() {
         console.log(paramsNames);
 
         if(name != null) { 
-            tittle.innerHTML += "Назва: " + name;
+            tittle.innerHTML += "\tНазва: " + name;
         }
 
         if(paramsNames.author_name != null) { 
-            tittle.innerHTML += "Автор: " + paramsNames.author_name;
+            tittle.innerHTML += "\tАвтор: " + paramsNames.author_name;
         }
 
         if(paramsNames.book_format != null) { 
-            tittle.innerHTML += "Формат: " + paramsNames.book_format;
+            tittle.innerHTML += "\tФормат: " + paramsNames.book_format;
         }
 
         if(paramsNames.publisher_name != null) { 
-            tittle.innerHTML += "Видавництво: " + paramsNames.publisher_name;
+            tittle.innerHTML += "\tВидавництво: " + paramsNames.publisher_name;
         }
 
         if(paramsNames.genre_name != null) { 
-            tittle.innerHTML += "Жанр: " + paramsNames.genre_name;
+            tittle.innerHTML += "\tЖанр: " + paramsNames.genre_name;
         }
 
         params.name = name;
